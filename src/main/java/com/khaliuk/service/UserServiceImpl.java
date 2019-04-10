@@ -1,6 +1,5 @@
 package com.khaliuk.service;
 
-import com.khaliuk.dao.RoleDao;
 import com.khaliuk.dao.UserDao;
 import com.khaliuk.model.Role;
 import com.khaliuk.model.User;
@@ -21,7 +20,7 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Autowired
-    private RoleDao roleDao;
+    private RoleService roleService;
 
     @Autowired
     private BCryptPasswordEncoder encoder;
@@ -49,7 +48,7 @@ public class UserServiceImpl implements UserService {
     public User emailVerification(String token) {
         User user = userDao.getByToken(token);
         user.setStatus(User.UserStatus.ACTIVE);
-        Role role = roleDao.getByRolename("USER");
+        Role role = roleService.getByRolename("USER");
         user.setRoles(Arrays.asList(role));
         userDao.updateUser(user);
         return user;
